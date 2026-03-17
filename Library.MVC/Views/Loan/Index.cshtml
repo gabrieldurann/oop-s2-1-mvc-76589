@@ -1,0 +1,65 @@
+@model IEnumerable<Library.Domain.Models.Loan>
+
+@{
+    ViewData["Title"] = "Loans";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Loans</h1>
+
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Create New Loan</a>
+    </p>
+}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Book</th>
+        <th>Member</th>
+        <th>Loan Date</th>
+        <th>Due Date</th>
+        <th>Returned Date</th>
+        <th>Status</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        string status;
+        if (item.ReturnedDate != null)
+        {
+            status = "Returned";
+        }
+        else if (item.IsOverdue)
+        {
+            status = "Overdue";
+        }
+        else
+        {
+            status = "Active";
+        }
+
+        <tr>
+            <td>@item.Book?.Title</td>
+            <td>@item.Member?.FullName</td>
+            <td>@item.LoanDate.ToShortDateString()</td>
+            <td>@item.DueDate.ToShortDateString()</td>
+            <td>@(item.ReturnedDate?.ToShortDateString() ?? "-")</td>
+            <td>@status</td>
+            <td>
+                @if (User.IsInRole("Admin") && item.ReturnedDate == null)
+                {
+                    <form asp-action="MarkReturned" method="post">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <button type="submit" class="btn btn-sm btn-success">Mark Returned</button>
+                    </form>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

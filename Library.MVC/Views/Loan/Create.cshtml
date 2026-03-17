@@ -1,0 +1,39 @@
+@model Library.MVC.Models.ViewModels.LoanCreateViewModel
+
+@{
+    ViewData["Title"] = "Create Loan";
+}
+
+<h1>Create Loan</h1>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="MemberId" class="control-label"></label>
+        <select asp-for="MemberId" asp-items="Model.Members" class="form-control"></select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BookId" class="control-label"></label>
+        <select asp-for="BookId" asp-items="Model.AvailableBooks" class="form-control"></select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="LoanDate" class="control-label"></label>
+        <input asp-for="LoanDate" type="date" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DueDate" class="control-label"></label>
+        <input asp-for="DueDate" type="date" class="form-control" />
+    </div>
+
+    <div class="form-group mt-3">
+        <input type="submit" value="Create Loan" class="btn btn-primary" />
+    </div>
+</form>
+
+<div class="mt-3">
+    <a asp-action="Index">Back to List</a>
+</div>
